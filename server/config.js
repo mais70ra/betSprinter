@@ -1,5 +1,8 @@
 const env = process.env.NODE_ENV;
 module.exports = {
+    webSocketServer: {
+        port: process.env.WEB_SOCKET_SERVER_PORT
+    },
     httpServer: {
         port: process.env.HTTP_SERVER_PORT
     },

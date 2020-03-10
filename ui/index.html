@@ -6,8 +6,15 @@
 </head>
     <style>* {padding: 0; margin: 0}</style>
     <script src="/node_modules/pixi.js/dist/pixi.min.js"></script>
+    <script src="/libs/websocket.js"></script>
 <body>
   <script type="text/javascript">
+    webSocketConnect()
+    .then(() => {
+        webSocket.send({yo: 1});
+    });
+
+
     let type = "WebGL"
     if(!PIXI.utils.isWebGLSupported()){
       type = "canvas"

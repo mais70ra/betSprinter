@@ -6,6 +6,8 @@
     "fs": "0.0.1-security",
     "morgan": "^1.9.1",
     "path": "^0.12.7",
-    "rotating-file-stream": "^2.0.2"
+    "rotating-file-stream": "^2.0.2",
+    "websocket": "^1.0.31",
+    "ws": "^7.2.3"
   }
 }
