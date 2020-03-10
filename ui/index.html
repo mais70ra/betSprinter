@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hello World</title>
+</head>
+    <style>* {padding: 0; margin: 0}</style>
+    <script src="/node_modules/pixi.js/dist/pixi.min.js"></script>
+<body>
+  <script type="text/javascript">
+    let type = "WebGL"
+    if(!PIXI.utils.isWebGLSupported()){
+      type = "canvas"
+    }
+
+    PIXI.utils.sayHello(type);
+    //Create a Pixi Application
+    let app = new PIXI.Application({});
+    app.renderer.view.style.position = "absolute";
+    app.renderer.view.style.display = "block";
+    app.renderer.autoResize = true;
+    app.renderer.resize(window.innerWidth, window.innerHeight);
+    //Add the canvas that Pixi automatically created for you to the HTML document
+    document.body.appendChild(app.view);
+    //load an image and run the `setup` function when it's done
+    PIXI.loader
+    .add("/static/images/cat.png")
+    .load(setup);
+
+    //This `setup` function will run when the image has loaded
+    function setup() {
+
+        //Create the cat sprite
+        let cat = new PIXI.Sprite(PIXI.loader.resources["/static/images/cat.png"].texture);
+        
+        //Add the cat to the stage
+        app.stage.addChild(cat);
+    }
+  </script>
+</body>
+</html>

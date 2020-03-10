@@ -1,0 +1,7 @@
+{
+  "version": "0.1",
+  "name": "bet-sprinter-ui",
+  "dependencies": {
+    "pixi.js": "^4.5.5"
+  }
+}

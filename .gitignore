@@ -1,0 +1,6 @@
+node_modules
+/ui/node_modules
+log/
+npm-debug.*
+.vscode/settings.json
+log
