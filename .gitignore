@@ -1,6 +1,8 @@
 node_modules
 /ui/node_modules
+/ui/package-lock.json
 log/
 npm-debug.*
 .vscode/settings.json
 log
+package-lock.json
