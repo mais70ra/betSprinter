@@ -6,6 +6,13 @@ const rfs = require('rotating-file-stream');
 const logDirectory = path.join(process.cwd(), "log");
 
 module.exports = {
+  log: (...msg) => {
+    try {
+      console.log(JSON.stringify(msg));
+    } catch(e) {
+      console.log(msg);
+    }
+  },
   logger: () => {
     // ensure log directory exists
     fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);

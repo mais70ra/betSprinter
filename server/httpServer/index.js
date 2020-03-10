@@ -10,7 +10,7 @@ module.exports = {
       var public = path.join(process.cwd(), config.publicPath || "/ui/");
       app.use(express.static(path.resolve(public)));
       app.use(log.logger());
-      app.listen(config.httpServer.port || 3000, () => {});
+      app.listen(config.httpServer.port, () => {});
     } catch (e) {
       console.error(e);
     }

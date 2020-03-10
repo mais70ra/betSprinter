@@ -1,6 +1,6 @@
 module.exports = {
   init: () => {},
-  add: msg => {
+  add: async function(msg) {
     return {
       status: 0
     };

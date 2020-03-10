@@ -16,8 +16,13 @@ function webSocketConnect(onReceive, onError) {
                 webSocket.send('connected');
                 resolve(webSocket);
             };
+            // webSocket.send('oooooooooo'); // invalid json
+            // webSocket.send('{id: 1}'); // invalid json
+            // webSocket.send('{"id": 1}'); // valid json
+            // webSocket.send('{"id": 1, method: "user.add"}'); // invalid json
+            // webSocket.send('{"id": 1, "method": "user.add"}'); // invalid json
             setInterval(() => {
-                webSocket.send('Eeee baicho');
+                webSocket.send('{"id": 1, "method": "user.add"}'); // invalid json
             }, 1000);
             
             webSocket.onerror = function(error) {
@@ -30,6 +35,7 @@ function webSocketConnect(onReceive, onError) {
                 // from server is json)
                 try {
                     var json = JSON.parse(message.data);
+                    console.log(json);
                 } catch (e) {
                     console.log("This doesn't look like a valid JSON: ", message.data);
                     return;
