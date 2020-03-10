@@ -1,6 +1,8 @@
 const modules = {
     user: require('../modules/user')
 };
+modules.user.init();
+
 const log = require('../logger').log;
 var trace = 0;
 const getTraceID = () => {

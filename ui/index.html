@@ -11,7 +11,17 @@
   <script type="text/javascript">
     webSocketConnect()
     .then(() => {
-        webSocket.send({yo: 1});
+        var req = {
+          id: 1,
+          method: "user.add",
+          params: {
+            firstName: 'Dido',
+            lastName: 'E pich',
+            username: 'admin',
+            password: '123'
+          }
+        }
+        webSocket.send(JSON.stringify(req));
     });
 
 

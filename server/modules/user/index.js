@@ -1,9 +1,20 @@
+'use strict';
+var database = require('./db');
+var CryptoJS = require('crypto-js');
+var db;
+
 module.exports = {
-  init: () => {},
+  init: () => {
+    database.init()
+    .then(r => {
+      db = r;
+    });
+  },
   add: async function(msg) {
-    return {
-      status: 0
-    };
+    msg.password = CryptoJS.MD5(msg.password).toString();
+    let resp = await db.create(msg);
+    delete resp.password;
+    return resp;
   },
   edit: msg => {
     return {

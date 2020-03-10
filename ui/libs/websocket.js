@@ -21,9 +21,9 @@ function webSocketConnect(onReceive, onError) {
             // webSocket.send('{"id": 1}'); // valid json
             // webSocket.send('{"id": 1, method: "user.add"}'); // invalid json
             // webSocket.send('{"id": 1, "method": "user.add"}'); // invalid json
-            setInterval(() => {
-                webSocket.send('{"id": 1, "method": "user.add"}'); // invalid json
-            }, 1000);
+            // setInterval(() => {
+            //     webSocket.send('{"id": 1, "method": "user.add"}'); // valid json
+            // }, 1000);
             
             webSocket.onerror = function(error) {
                 console.log(error);

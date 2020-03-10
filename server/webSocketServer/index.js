@@ -67,9 +67,9 @@ module.exports = {
           ws.send(`${e}`);
         }
       });
-      //   setInterval(() => {
-      //     ws.send(`${new Date()}`);
-      //   }, 10000);
+      setInterval(() => {
+        ws.send(`${Date.now()}`);
+      }, 10000);
     });
   }
 };

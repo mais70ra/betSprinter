@@ -22,11 +22,11 @@
             "env": {
                 "NODE_ENV": "dev",
                 "DB_CRED_USERNAME": "postgres",
-                "DB_CRED_PASSWORD": "123",
+                "DB_CRED_PASSWORD": "admin",
                 "DB_NAME": "betSprinter",
                 "DB_HOST": "localhost",
-                "DB_PORT": "5432",
-                "HTTP_SERVER_PORT": "5432",
+                "DB_PORT": "5433",
+                "HTTP_SERVER_PORT": "5000",
                 "WEB_SOCKET_SERVER_PORT": "40510",
                 "NODE_PATH": "${workspaceRoot}/dev/"
             }

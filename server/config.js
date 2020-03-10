@@ -9,10 +9,16 @@ module.exports = {
     database: {
         credentials: {
             username: process.env.DB_CRED_USERNAME || 'admin',
-            password: process.env.DB_CRED_USERNAME || 'admin'
+            password: process.env.DB_CRED_PASSWORD || 'admin'
         },
-        name: process.env.DB_NAME || 'betSprinter',
-        host: process.env.DB_HOST || 'localhost',
-        port: process.env.DB_PORT || '5432'
+        props: {
+			dialect: 'postgres',
+			host: process.env.DB_HOST || 'localhost',
+			port: process.env.DB_PORT || '5432',
+			define: {
+				'freezeTableName': true
+			}
+		},
+        name: process.env.DB_NAME || 'betSprinter'
     }
 };
