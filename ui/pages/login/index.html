@@ -4,8 +4,10 @@
   <meta charset="utf-8">
   <title>Bet Sprinter</title>
 </head>
-    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
-    <script src="/libs/websocket.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/css/main.css">
+    <script src="../../libs/popup.js"></script>
+    <script src="../../libs/websocket.js"></script>
+    <script src="/pages/login/index.js"></script>
 <body>
   <div class="login">
     <div class="top-box bold p5">Login</div>
@@ -17,9 +19,9 @@
         <div class="clear p5"></div>
         <label>Enter password</label>
         <div class="clear p5"></div>
-        <input class="w-100" id="login.password" type="text" value="" placeholder="Enter password" />
+        <input class="w-100" id="login.password" type="password" value="" placeholder="Enter password" />
         <div class="clear p5"></div>
-        <button class="button right">Login</button>
+        <button class="button right" onclick="login()">Login</button>
         <div class="clear pb5"></div>
         <a class="right" href="">Register</a>
       </div>

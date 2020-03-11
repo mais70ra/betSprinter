@@ -1,9 +1,12 @@
 var webSocket;
+var reqWSC = function() {
+    popup.error('There is a problem with the connection, please try again latter');
+};
 
 function webSocketConnect(onReceive, onError) {
     return new Promise(function(resolve, reject) {
         if (webSocket) {
-            resolve(webSocket);
+            resolve();
         }
         try {
             // if user is running mozilla then use it's built-in WebSocket
@@ -14,7 +17,7 @@ function webSocketConnect(onReceive, onError) {
             webSocket.onopen = function() {
                 console.log('websocket is connected ...')
                 webSocket.send('connected');
-                resolve(webSocket);
+                resolve();
             };
             // webSocket.send('oooooooooo'); // invalid json
             // webSocket.send('{id: 1}'); // invalid json
@@ -34,8 +37,16 @@ function webSocketConnect(onReceive, onError) {
                 // try to decode json (I assume that each message
                 // from server is json)
                 try {
-                    var json = JSON.parse(message.data);
-                    console.log(json);
+                    var body = JSON.parse(message.data);
+                    if (body.id) {
+                        if (reqQueue[body.id] && reqQueue[body.id].func) {
+                            reqQueue[body.id].func(body);
+                            clearTimeout(reqQueue[body.id].timeout);
+                            delete reqQueue[body.id];
+                        } else {
+                            console.log('This request was timeout!');
+                        }
+                    }
                 } catch (e) {
                     console.log("This doesn't look like a valid JSON: ", message.data);
                     return;
@@ -47,3 +58,45 @@ function webSocketConnect(onReceive, onError) {
         }
     });
 }
+var reqQueue = {};
+webSocketConnect().then(r => {
+    reqWSC = function(method, params) {
+        return new Promise(function(resolve, reject) {
+            let id = makeid()
+            let req = {
+                id,
+                method,
+                params
+            };
+            reqQueue[id] = {
+                func: function(body) {
+                    if (body.result) {
+                        resolve(body);
+                    } else if (body.error) {
+                        reject(body.error);
+                    } else {
+                        reject(body);
+                    }
+                },
+                timeout: setTimeout(function(){ 
+                    delete reqQueue[id];
+                    let err = new Error('Timeout');
+                    popup.error('Timeout from the server');
+                    reject(err);
+                }, 30000)
+            };
+            webSocket.send(JSON.stringify(req));
+        });
+    }
+});
+
+function makeid(length) {
+    length = length || 15;
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }

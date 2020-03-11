@@ -28,5 +28,22 @@ module.exports = {
         lastName: "E pich"
       }
     ];
+  },
+  login: async function(msg) {
+    if (!msg.username || !msg.password) {
+      throw new Error('Please enter username and password!')
+    } else {
+      msg.password = CryptoJS.MD5(msg.password).toString();
+      const resp = await db.findAll({
+        where: {
+          password: msg.password,
+          username: msg.username
+        }
+      });
+      if (resp.length === 0) {
+        throw new Error('Wrong username or password');
+      }
+      return resp;
+    }
   }
 };

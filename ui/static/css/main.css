@@ -1,0 +1,96 @@
+body {
+  background-color: #e9ebee;
+  font-family: sans-serif; 
+}
+
+input {
+    height: 25px;
+    margin: 0 auto;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px 0px 5px 5px;
+}
+
+.login {
+    background-color: #FFFFFF;
+    width: 30%;
+    position: absolute;
+    top: 30%;
+    left: calc(50% - 15%);
+    border-radius: 5px 5px 0 0;
+}
+
+.login .top-box {
+    background-color: #6699ff;
+    border-bottom: 1px solid #dddfe2;  
+    border-radius: 5px 5px 0 0;
+    text-align: center;
+    font-size: 30px;
+    color: #FFF;
+}
+
+.login .left-button {
+
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.p5 {
+    padding: 5px;
+}
+
+.pb5 {
+    padding-bottom: 5px;
+}
+
+.p20 {
+    padding: 20px;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+
+.clear {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.left {
+    float:left;
+}
+
+.right {
+    float: right;
+}
+
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .button {
+    display: inline-block;
+    padding: 5px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #6699ff;
+    border: none;
+    border-radius: 15px;
+  }
+
+  .button:hover {background-color: #3377ff}
+
+.button:active {
+  background-color: #3377ff;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}

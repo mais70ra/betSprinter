@@ -11,52 +11,63 @@ module.exports = {
         try {
           var msg = JSON.parse(message);
         } catch (e) {
-            let response = {
-                errorCode: 9999,
-                errorMessage: "This doesn't look like a valid JSON",
-                requestBody: message
-            };
-            log(response);
-            ws.send(JSON.stringify(response));
+          let response = {
+            error: {
+              code: 9999,
+              message: "This doesn't look like a valid JSON",
+              requestBody: message
+            }
+          };
+          log(response);
+          ws.send(JSON.stringify(response));
           return;
         }
         try {
           if (msg.id) {
-              if (msg.method && typeof msg.method === 'string') {
-                core.call(msg.method, msg.params)
+            if (msg.method && typeof msg.method === "string") {
+              core
+                .call(msg.method, msg.params)
                 .then(res => {
-                    let response = {
-                        id: msg.id,
-                        result: res
-                    };
-                    log(response);
-                    ws.send(JSON.stringify(response));
-                })
-                .catch((e) => {
-                    let response = {
-                        id: msg.id,
-                        errorCode: e.code,
-                        errorMessage: e.message
-                    };
-                    log(response);
-                    ws.send(JSON.stringify(response));
-                });
-              } else {
-                let response = {
+                  let response = {
                     id: msg.id,
-                    errorCode: 9997,
-                    errorMessage: "There is no method or it's invalid method in the request: ",
-                    requestBody: msg
-                };
-                log(response);
-                ws.send(JSON.stringify(response));
-                return;
-              }
+                    result: res
+                  };
+                  log(response);
+                  ws.send(JSON.stringify(response));
+                })
+                .catch(e => {
+                  let response = {
+                    id: msg.id,
+                    error: {
+                      code: e.code,
+                      message: e.message,
+                      stack: e.stack
+                    }
+                  };
+                  log(response);
+                  ws.send(JSON.stringify(response));
+                });
+            } else {
+              let response = {
+                id: msg.id,
+                error: {
+                  code: 9997,
+                  message:
+                    "There is no method or it's invalid method in the request: ",
+                  requestBody: msg
+                }
+              };
+              log(response);
+              ws.send(JSON.stringify(response));
+              return;
+            }
           } else {
             let response = {
-                errorCode: 9998,
-                errorMessage: "There is no id in the request: ",
+              error: {
+                code: 9998,
+                message: "There is no id in the request: ",
                 requestBody: msg
+              }
             };
             log(response);
             ws.send(JSON.stringify(response));
@@ -67,9 +78,9 @@ module.exports = {
           ws.send(`${e}`);
         }
       });
-      setInterval(() => {
-        ws.send(`${Date.now()}`);
-      }, 10000);
+      // setInterval(() => {
+      //   ws.send(`${Date.now()}`);
+      // }, 10000);
     });
   }
 };
