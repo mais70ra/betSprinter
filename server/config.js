@@ -1,5 +1,8 @@
 const env = process.env.NODE_ENV;
 module.exports = {
+    jwt: {
+        cert: 'secret'
+    },
     webSocketServer: {
         port: process.env.WEB_SOCKET_SERVER_PORT || 40510
     },

@@ -6,6 +6,7 @@
 </head>
     <link rel="stylesheet" type="text/css" href="../../static/css/main.css">
     <script src="../../libs/popup.js"></script>
+    <script src="../../libs/cookie.js"></script>
     <script src="../../libs/websocket.js"></script>
     <script src="/pages/login/index.js"></script>
 <body>
@@ -22,6 +23,8 @@
         <input class="w-100" id="login.password" type="password" value="" placeholder="Enter password" />
         <div class="clear p5"></div>
         <button class="button right" onclick="login()">Login</button>
+        <div class="clear pb5"></div>
+        <button class="button right" onclick="testRequest()">testRequest</button>
         <div class="clear pb5"></div>
         <a class="right" href="">Register</a>
       </div>

@@ -43,7 +43,7 @@ module.exports = {
       if (resp.length === 0) {
         throw new Error('Wrong username or password');
       }
-      return resp;
+      return resp[0];
     }
   }
 };

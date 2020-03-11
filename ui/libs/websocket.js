@@ -39,10 +39,8 @@ function webSocketConnect(onReceive, onError) {
                 try {
                     var body = JSON.parse(message.data);
                     if (body.id) {
-                        if (reqQueue[body.id] && reqQueue[body.id].func) {
-                            reqQueue[body.id].func(body);
-                            clearTimeout(reqQueue[body.id].timeout);
-                            delete reqQueue[body.id];
+                        if (reqQueue[body.id]) {
+                            reqQueue[body.id](body);
                         } else {
                             console.log('This request was timeout!');
                         }
@@ -59,6 +57,7 @@ function webSocketConnect(onReceive, onError) {
     });
 }
 var reqQueue = {};
+
 webSocketConnect().then(r => {
     reqWSC = function(method, params) {
         return new Promise(function(resolve, reject) {
@@ -66,25 +65,28 @@ webSocketConnect().then(r => {
             let req = {
                 id,
                 method,
-                params
+                params,
+                headers: {
+                    jwtToken: getCookie('jwtToken')
+                }
             };
-            reqQueue[id] = {
-                func: function(body) {
-                    if (body.result) {
-                        resolve(body);
-                    } else if (body.error) {
-                        reject(body.error);
-                    } else {
-                        reject(body);
-                    }
-                },
-                timeout: setTimeout(function(){ 
-                    delete reqQueue[id];
-                    let err = new Error('Timeout');
-                    popup.error('Timeout from the server');
-                    reject(err);
-                }, 30000)
-            };
+            var timeout = setTimeout(function(){ 
+                delete reqQueue[id];
+                let err = new Error('Timeout');
+                popup.error('Timeout from the server');
+                reject(err);
+            }, 30000);
+            reqQueue[id] = function(body) {
+                clearTimeout(timeout);
+                if (body.result) {
+                    resolve(body);
+                } else if (body.error) {
+                    reject(body.error);
+                } else {
+                    reject(body);
+                }
+                delete reqQueue[id];
+            }
             webSocket.send(JSON.stringify(req));
         });
     }

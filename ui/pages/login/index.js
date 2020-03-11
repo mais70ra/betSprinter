@@ -14,6 +14,20 @@ function login() {
         password: password
     })
     .then(r => {
+        setCookie('jwtToken', r.token);
+        popup.success(JSON.stringify(r));
+    })
+    .catch(e => {
+        popup.error(e.message);
+    });
+}
+
+function testRequest() {
+    reqWSC('user.add', {
+        username: 'asd',
+        password: 'asd'
+    })
+    .then(r => {
         popup.success(JSON.stringify(r));
     })
     .catch(e => {

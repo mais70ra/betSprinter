@@ -1,12 +1,14 @@
 const WebSocketServer = require("ws").Server;
 const config = require("../config");
 const core = require("../core");
+const session = require('../core/session');
+const publicMethods = ['user.login'];
 const log = require("../logger").log;
 module.exports = {
   init: () => {
     var wss = new WebSocketServer({ port: config.webSocketServer.port });
     wss.on("connection", function(ws) {
-      ws.on("message", function(message) {
+      ws.on("message", async function(message) {
         log("received: %s", message);
         try {
           var msg = JSON.parse(message);
@@ -25,12 +27,24 @@ module.exports = {
         try {
           if (msg.id) {
             if (msg.method && typeof msg.method === "string") {
+              if (publicMethods.indexOf(msg.method) === -1) {
+                if (msg.headers && msg.headers.jwtToken) {
+                  let sessionValid = await session.verify(msg.headers.jwtToken);
+                  console.log(sessionValid);
+                } else {
+                  throw new Error('Invalid session');
+                }
+              }
               core
                 .call(msg.method, msg.params)
-                .then(res => {
+                .then(async function(res) {
+                  if (msg.method === 'user.login') {
+                    var token = await session.add(res);
+                  }
                   let response = {
                     id: msg.id,
-                    result: res
+                    result: res,
+                    token: token
                   };
                   log(response);
                   ws.send(JSON.stringify(response));
