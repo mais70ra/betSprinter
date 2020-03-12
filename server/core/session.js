@@ -1,6 +1,6 @@
 var jwt = require("jsonwebtoken");
 var cert = require("../config").jwt.cert;
-
+var blackListTokens = {};
 module.exports = {
   add: async function(value) {
     try {
@@ -19,6 +19,9 @@ module.exports = {
   verify: async function(token) {
     return new Promise(function(resolve, reject) {
       try {
+        if (blackListTokens[token]) {
+          throw new Error('Invalid session');
+        }
         jwt.verify(
           token,
           cert,
@@ -33,5 +36,8 @@ module.exports = {
         reject(e);
       }
     });
+  },
+  delete: async function(token) {
+    blackListTokens[token] = true;;
   }
 };

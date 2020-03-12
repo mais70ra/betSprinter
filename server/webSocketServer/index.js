@@ -30,7 +30,8 @@ module.exports = {
               if (publicMethods.indexOf(msg.method) === -1) {
                 if (msg.headers && msg.headers.jwtToken) {
                   try {
-                    let sessionValid = await session.verify(msg.headers.jwtToken);
+                    var sessionValid = await session.verify(msg.headers.jwtToken);
+                    sessionValid.jwtToken = msg.headers.jwtToken;
                   } catch(e) {
                     return throwInvalidSession(msg, e, ws);
                   }
@@ -39,14 +40,14 @@ module.exports = {
                 }
               }
               core
-                .call(msg.method, msg.params)
+                .call(msg.method, msg.params, sessionValid)
                 .then(async function(res) {
                   if (msg.method === 'user.login') {
                     var token = await session.add(res);
                   }
                   let response = {
                     id: msg.id,
-                    result: res,
+                    result: res || {},
                     token: token
                   };
                   log(response);

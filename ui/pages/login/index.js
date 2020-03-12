@@ -37,27 +37,3 @@ function registerUser() {
         popup.error(e.message);
     });
 }
-
-function validateForm(name) {
-    var arr = document.forms[name].getElementsByTagName("input");
-    var obj = {};
-    var len = arr.length;
-    var validation = [];
-    // arr[0].getAttribute('required')
-    for (var i=0; i < len; i++ ) {
-        obj[arr[i].getAttribute('name')] = arr[i].value;
-        if (arr[i].getAttribute('required') === '' || arr[i].getAttribute('required') === 'true') {
-            if (!arr[i].value) {
-                validation.push(arr[i].getAttribute('placeholder'));
-            }
-        }
-    }
-    if (validation.length > 0) {
-        let message = 'These fields are required: ' + validation.join(', ');
-        alert(message);
-        throw new Error(message);
-    }
-    return obj;
-}
-// var arr = document.forms["registrationForm"].getElementsByTagName("input");
-// for (var i=0; i < arr.length; i++ ) {console.log(arr[i]) }

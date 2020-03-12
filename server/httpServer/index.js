@@ -26,7 +26,7 @@ var staticMiddleware = async function(req, res, next) {
   try {
     if ((req.path.endsWith('.html') || req.path.endsWith('/') ) && req.headers.cookie) {
       var jwtToken = getCookie('jwtToken', req.headers.cookie);
-      let sessionValid = await session.verify(jwtToken);
+      var sessionValid = await session.verify(jwtToken);
     }
     next();
   } catch(e) {

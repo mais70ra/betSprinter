@@ -1,5 +1,6 @@
 'use strict';
 var database = require('./db');
+var session = require('../../core/session');
 var CryptoJS = require('crypto-js');
 var db;
 
@@ -10,13 +11,13 @@ module.exports = {
       db = r;
     });
   },
-  add: async function(msg) {
+  add: async function(msg, meta) {
     msg.password = CryptoJS.MD5(msg.password).toString();
     let resp = await db.create(msg);
     delete resp.password;
     return resp;
   },
-  edit: msg => {
+  edit: (msg, meta)=> {
     return {
       status: 0
     };
@@ -29,7 +30,7 @@ module.exports = {
       }
     ];
   },
-  login: async function(msg) {
+  login: async function(msg, meta) {
     if (!msg.username || !msg.password) {
       throw new Error('Please enter username and password!')
     } else {
@@ -46,7 +47,11 @@ module.exports = {
       return resp[0];
     }
   },
-  check: async function(msg) {
+  check: async function(msg, meta) {
     return;
-  }
+  },
+  logout: async function(msg, meta) {
+    session.delete(meta.jwtToken);
+    return;
+  },
 };
