@@ -11,16 +11,17 @@ input {
     padding: 5px 0px 5px 5px;
 }
 
-.login {
+#login {
     background-color: #FFFFFF;
     width: 30%;
     position: absolute;
     top: 30%;
     left: calc(50% - 15%);
     border-radius: 5px 5px 0 0;
+    margin-bottom: 50px;
 }
 
-.login .top-box {
+#login .top-box {
     background-color: #6699ff;
     border-bottom: 1px solid #dddfe2;  
     border-radius: 5px 5px 0 0;
@@ -29,8 +30,12 @@ input {
     color: #FFF;
 }
 
-.login .left-button {
+#login .left-button {
 
+}
+
+#registrationForm {
+    display: none;
 }
 
 .bold {

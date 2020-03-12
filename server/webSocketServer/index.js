@@ -2,7 +2,7 @@ const WebSocketServer = require("ws").Server;
 const config = require("../config");
 const core = require("../core");
 const session = require('../core/session');
-const publicMethods = ['user.login'];
+const publicMethods = ['user.login', 'user.add'];
 const log = require("../logger").log;
 module.exports = {
   init: () => {
@@ -29,10 +29,13 @@ module.exports = {
             if (msg.method && typeof msg.method === "string") {
               if (publicMethods.indexOf(msg.method) === -1) {
                 if (msg.headers && msg.headers.jwtToken) {
-                  let sessionValid = await session.verify(msg.headers.jwtToken);
-                  console.log(sessionValid);
+                  try {
+                    let sessionValid = await session.verify(msg.headers.jwtToken);
+                  } catch(e) {
+                    return throwInvalidSession(msg, e, ws);
+                  }
                 } else {
-                  throw new Error('Invalid session');
+                  return throwInvalidSession(msg, undefined, ws)
                 }
               }
               core
@@ -98,3 +101,17 @@ module.exports = {
     });
   }
 };
+
+function throwInvalidSession (msg, e, ws) {
+  let response = {
+    id: msg.id,
+    error: {
+      code: 401,
+      message: "Invalid session",
+      stack: e
+    }
+  };
+  log(response);
+  ws.send(JSON.stringify(response));
+  return;
+}

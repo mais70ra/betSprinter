@@ -45,5 +45,8 @@ module.exports = {
       }
       return resp[0];
     }
+  },
+  check: async function(msg) {
+    return;
   }
 };

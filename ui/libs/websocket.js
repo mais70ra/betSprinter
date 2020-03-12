@@ -16,7 +16,6 @@ function webSocketConnect(onReceive, onError) {
 
             webSocket.onopen = function() {
                 console.log('websocket is connected ...')
-                webSocket.send('connected');
                 resolve();
             };
             // webSocket.send('oooooooooo'); // invalid json
@@ -90,6 +89,14 @@ webSocketConnect().then(r => {
             webSocket.send(JSON.stringify(req));
         });
     }
+
+    reqWSC('user.check', {})
+    .then(r => {
+
+    })
+    .catch(e => {
+
+    });
 });
 
 function makeid(length) {
