@@ -2,6 +2,7 @@
   "version": "0.1",
   "name": "bet-sprinter-ui",
   "dependencies": {
+    "gsap": "^3.2.4",
     "pixi.js": "^4.5.5"
   }
 }

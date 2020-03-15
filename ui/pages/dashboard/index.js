@@ -1,6 +1,4 @@
-var betObject = {
-
-};
+var betObject = {};
 
 function logout() {
     reqWSC('user.logout', {})
@@ -29,7 +27,9 @@ function selectBetObject(className, btn) {
     if (previousSelectedButton) {
         previousSelectedButton.classList.remove(className + '-selected');
     }
-    btn.classList.add(className + '-selected');
+    if (btn) {
+        btn.classList.add(className + '-selected');
+    }
 }
 
 function finishBet() {
@@ -45,12 +45,61 @@ function finishBet() {
         popup.error('Please choose amount!');
         return;
     }
+    disableBets();
 }
 
-function disableAll() {
-
+function disableBets() {
+    let btns = document.getElementsByClassName('btn');
+    let btnsLength = btns.length;
+    for(var i = 0; i < btnsLength; i++) {
+        btns[i].setAttribute("disabled", true);
+    }
+}
+function enableBets() {
+    let btns = document.getElementsByClassName('btn');
+    let btnsLength = btns.length;
+    for(var i = 0; i < btnsLength; i++) {
+        btns[i].removeAttribute("disabled");
+    }
 }
 
-function enableAll() {
-
-}
+var tween = new TimelineMax({
+    paused: true
+  });
+  var duration = 10;
+  window.onload = function() {
+    var lineAnimation = document.querySelector("#line-animation");
+    var lineDurationNumber = document.querySelector("#line-duration-number");
+    var lineDurationStatusText = document.querySelector(
+      "#line-duration-status-text"
+    );
+  
+    tween.to({}, duration, {
+      force3D: true,
+      onComplete: function() {
+        lineDurationStatusText.innerHTML = "Game has been started, no more bets!";
+        lineDurationNumber.style.display = "none";
+        disableBets();
+      },
+      onStart: function() {
+        lineDurationStatusText.innerHTML = "The game will start in: ";
+        lineDurationNumber.style.display = "";
+        lineDurationNumber.innerHTML = duration;
+        betObject = {};
+        selectBetObject('btn-amount');
+        selectBetObject('btn-player');
+        enableBets();
+      },
+      onUpdate: function(timeline) {
+        let currentProgress = this.progress();
+        lineDurationNumber.innerHTML = parseFloat(
+          duration - duration * currentProgress
+        ).toFixed(2);
+        TweenMax.set(lineAnimation, {
+          scaleX: currentProgress,
+          transformOrigin: "0px 0px"
+        });
+      }
+    });
+  };
+  

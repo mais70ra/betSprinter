@@ -1,5 +1,4 @@
 body {
-  background-color: #e9ebee;
   font-family: sans-serif;
 }
 
@@ -153,4 +152,28 @@ button.btn-amount.btn.btn-blue.btn-amount-selected{
 .bet-container {
   margin: auto;
   width: 50%;
+}
+
+#line-path {
+    width: 100%;
+    height: 3px;
+    margin-top: -3px;
+    background: gray;
+}
+
+#line-animation {
+    height: 3px;
+    width: 100%;
+    background-color:#6be66b;
+}
+.text-center {
+    text-align: center;
+}
+.line-duration-number {
+    width: 30px;
+}
+
+.btn:disabled {
+    background-color: #cccccc;
+    color: #666666;
 }

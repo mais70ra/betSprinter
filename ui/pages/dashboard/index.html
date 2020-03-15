@@ -1,85 +1,117 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Bet sprinter</title>
 </head>
-    <style>* {padding: 0; margin: 0}</style>
-    <link rel="stylesheet" type="text/css" href="../../static/css/main.css">
-    <script src="../../node_modules/pixi.js/dist/pixi.min.js"></script>
-    <script src="../../libs/popup.js"></script>
-    <script src="../../libs/utils.js"></script>
-    <script src="../../libs/websocket.js"></script>
-    <script src="/pages/dashboard/index.js"></script>
+<style>
+  * {
+    padding: 0;
+    margin: 0
+  }
+</style>
+<link rel="stylesheet" type="text/css" href="../../static/css/main.css">
+<link href='//fonts.googleapis.com/css?family=Signika+Negative:300,400' rel='stylesheet' type='text/css'>
+
+<script src="../../node_modules/pixi.js/dist/pixi.min.js"></script>
+<script src="../../node_modules/gsap/dist/gsap.min.js"></script>
+<script src="../../libs/popup.js"></script>
+<script src="../../libs/utils.js"></script>
+<script src="../../libs/websocket.js"></script>
+<script src="/pages/dashboard/index.js"></script>
+
 <body>
   <div class="bar">
-    <link rel="shortcut icon" href="favicon.ico" type="/static/images/logout-32.png"/>
+    <link rel="shortcut icon" href="favicon.ico" type="/static/images/logout-32.png" />
     <img src="/static/images/logout.png" alt="Logout" class="logoutImage pointer right" onclick="logout()">
   </div>
   <div class="bet-container">
-    <div class="bet-container-player">
-      <div class="clear p5"></div>
-      <label id="choosePlayer">Choose player</label>
-      <div class="clear p5"></div>
-      <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 1);">One</button>
-      <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 2);">Two</button>
-      <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 3);">Three</button>
-      <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 4);">Four</button>
-      <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 5);">Five</button>
-      <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 6);">Six</button>
-      <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 7);">Seven</button>
-      <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 8);">Eight</button>
-    </div>
     <div class="clear p5"></div>
-    <div class="bet-container-amount">
-      <label id="chooseAmount">Choose amount</label>
+    <div class="bet-line-animation">
       <div class="clear p5"></div>
-      <button class="btn-amount btn btn-blue" onclick="betAmount(this, 1);">1</button>
-      <button class="btn-amount btn btn-blue" onclick="betAmount(this, 5);">5</button>
-      <button class="btn-amount btn btn-blue" onclick="betAmount(this, 10);">10</button>
-      <button class="btn-amount btn btn-blue" onclick="betAmount(this, 20);">20</button>
+      <div class="text-center"><span id="line-duration-status-text">The game will start in: </span><span id="line-duration-number">10</span></div>
+      <div class="clear p5"></div>
+      <div id="line-animation"></div>
+      <div id="line-path"></div>
+      <div class="clear p5"></div>
+      <div class="nav">
+        <button id="play" onclick="tween.play()">play()</button>
+        <!-- <button id="pause" onclick="tween.pause()">pause()</button>
+        <button id="resume" onclick="tween.resume()">resume()</button>
+        <button id="reverse" onclick="tween.reverse()">reverse()</button> -->
+        <button id="restart" onclick="tween.restart()">restart()</button>
+      </div>
+      <div class="clear p5"></div>
+      <div class="bet-container-player">
+        <label id="choosePlayer">Choose player</label>
+        <div class="clear p5"></div>
+        <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 1);">One</button>
+        <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 2);">Two</button>
+        <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 3);">Three</button>
+        <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 4);">Four</button>
+        <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 5);">Five</button>
+        <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 6);">Six</button>
+        <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 7);">Seven</button>
+        <button class="btn-player btn btn-blue" onclick="betOnPlayer(this, 8);">Eight</button>
+      </div>
+      <div class="clear p5"></div>
+      <div class="bet-container-amount">
+        <label id="chooseAmount">Choose amount</label>
+        <div class="clear p5"></div>
+        <button class="btn-amount btn btn-blue" onclick="betAmount(this, 1);">1</button>
+        <button class="btn-amount btn btn-blue" onclick="betAmount(this, 5);">5</button>
+        <button class="btn-amount btn btn-blue" onclick="betAmount(this, 10);">10</button>
+        <button class="btn-amount btn btn-blue" onclick="betAmount(this, 20);">20</button>
+      </div>
+      <div class="clear p5"></div>
+      <div class="bet-container-finish">
+        <div class="clear p5"></div>
+        <button class="btn btn-green" onclick="finishBet(this);">Finish bet</button>
+        <div class="clear p5"></div>
+      </div>
     </div>
-    <div class="clear p5"></div>
-    <div class="bet-container-finish">
-      <div class="clear p5"></div>
-      <button class="btn btn-green" onclick="finishBet(this);">Finish bet</button>
-      <div class="clear p5"></div>
-    </div>
-  </div>
 
-  <script type="text/javascript">
-    // let type = "WebGL"
-    // if(!PIXI.utils.isWebGLSupported()){
-    //   type = "canvas"
-    // }
+    <script type="text/javascript">
+      // let type = "WebGL"
+      // if(!PIXI.utils.isWebGLSupported()){
+      //   type = "canvas"
+      // }
 
-    // PIXI.utils.sayHello(type);
-    // //Create a Pixi Application
-    // let app = new PIXI.Application({});
-    // app.renderer.view.style.position = "absolute";
-    // app.renderer.view.style.display = "block";
-    // app.renderer.autoResize = true;
-    
-    // // aaaaaaaaaaaaaaaa
-    // // app.renderer.resize(window.innerWidth, window.innerHeight);
-    // // aaaaaaaaaaaaaaaa
-    
-    // //Add the canvas that Pixi automatically created for you to the HTML document
-    // document.body.appendChild(app.view);
-    // //load an image and run the `setup` function when it's done
-    // PIXI.loader
-    // .add("/static/images/cat.png")
-    // .load(setup);
+      // PIXI.utils.sayHello(type);
+      // //Create a Pixi Application
+      // let app = new PIXI.Application({});
+      // app.renderer.view.style.position = "absolute";
+      // app.renderer.view.style.display = "block";
+      // app.renderer.autoResize = true;
 
-    // //This `setup` function will run when the image has loaded
-    // function setup() {
+      // // aaaaaaaaaaaaaaaa
+      // // app.renderer.resize(window.innerWidth, window.innerHeight);
+      // // aaaaaaaaaaaaaaaa
 
-    //     //Create the cat sprite
-    //     let cat = new PIXI.Sprite(PIXI.loader.resources["/static/images/cat.png"].texture);
-        
-    //     //Add the cat to the stage
-    //     app.stage.addChild(cat);
-    // }
-  </script>
+      // //Add the canvas that Pixi automatically created for you to the HTML document
+      // document.body.appendChild(app.view);
+      // //load an image and run the `setup` function when it's done
+      // PIXI.loader
+      // .add("/static/images/cat.png")
+      // .load(setup);
+
+      // //This `setup` function will run when the image has loaded
+      // function setup() {
+
+      //     //Create the cat sprite
+      //     let cat = new PIXI.Sprite(PIXI.loader.resources["/static/images/cat.png"].texture);
+
+      //     //Add the cat to the stage
+      //     app.stage.addChild(cat);
+      // }
+
+      // var tween = gsap.to(".line-animation", {
+      //     duration: 4, 
+      //     x: 750, 
+      //     ease: "none", 
+      //     paused: true
+      // });
+    </script>
 </body>
 </html>
