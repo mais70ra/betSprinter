@@ -158,7 +158,7 @@ button.btn-amount.btn.btn-blue.btn-amount-selected{
     width: 100%;
     height: 3px;
     margin-top: -3px;
-    background: gray;
+    background: #DCDCDC;
 }
 
 #line-animation {

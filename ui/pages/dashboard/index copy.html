@@ -39,6 +39,9 @@
       <div class="clear p5"></div>
       <div class="nav">
         <button id="play" onclick="tween.play()">play()</button>
+        <!-- <button id="pause" onclick="tween.pause()">pause()</button>
+        <button id="resume" onclick="tween.resume()">resume()</button>
+        <button id="reverse" onclick="tween.reverse()">reverse()</button> -->
         <button id="restart" onclick="tween.restart()">restart()</button>
       </div>
       <div class="clear p5"></div>
@@ -70,97 +73,56 @@
         <div class="clear p5"></div>
       </div>
     </div>
-    <div id="game-container"></div>
+    <div id="game-container">
+      <img src="/static/images/stadium.jpg" alt="Stadium" style="width: 800px; margin-left: -20px;" />
+    </div>
 </body>
 <script>
-  var renderer = PIXI.autoDetectRenderer(800, 400, { antialias: true });
-  document.getElementById('game-container').appendChild(renderer.view);
-  var stage = new PIXI.Container();
-  stage.interactive = true;
-  var graphics = new PIXI.Graphics();
-  var colors = {
-    c0: '0xFF8C00',
-    c1: '0x3009CB',
-    c2: '0xCB2909',
-    c3: '0x07A7EC',
-    c4: '0x16E138',
-    c5: '0xF510CF',
-    c6: '0xFDFD03',
-    c7: '0x8A262A'
-  };
-  let numberOfPlayers = 8;
-  for (var i = 0; i < numberOfPlayers; i++) {
-    if (i === 0) {
-      graphics.beginFill(0x008000, 1);
-    }
-    graphics.lineStyle(10, colors['c' + i], 0.8);
-    graphics.moveTo(200, 100 - (i * 10));
-    graphics.quadraticCurveTo(0 - (i * 20), 200, 200, 300 + (i * 10));
-    graphics.lineTo(600, 300 + (i * 10));
-    graphics.quadraticCurveTo(800 + (i * 20), 200, 600, 100 - (i * 10));
-    graphics.lineTo(200, 100 - (i * 10));
-    graphics.endFill();
-  }
-  stage.addChild(graphics);
-  var players = [];
-  for (var i = 0; i < numberOfPlayers; i++) {
-    players[i] = new PIXI.Graphics();
-    stage.addChild(players[i]);
-    players[i].countPosition = 0;
-    players[i].speed = 1 + i * 0.1; // which place
-    players[i].position.x = 100;
-    players[i].position.y = 200 + i*10;
-    players[i].drawCircle(100, -100 - 2 * i*10, 5);
-  }
 
-  function startTheGame() {
-    let length = players.length;
-    arr = [4, 3, 2, 1, 5, 8, 7, 6];
-    for (var i = 0; i < length; i++) {
-      players[i].countPosition = 0;
-      players[i].speed = 0.1 * arr[i];
-    }
-    animate();
-  }
+// const app = new PIXI.Application({ transparent: true });
+// document.getElementById('game-container').appendChild(app.view);
+// // var app = new PIXI.Application(400, 400, { antialias: true });
+// // document.body.appendChild(app.view);
 
-  renderer.render(stage);
-  function animate() {
-    for (var i = 0; i < numberOfPlayers; i++) {
-      playerAnimation(players[i], i*10);
-    }
-    renderer.render(stage);
-    requestAnimationFrame(animate);
-  }
+// // Render the compass
+// var compassContainer = new PIXI.Container({ transparent: true });
 
-  function playerAnimation(pl, len) {
-    pl.clear();
-    pl.beginFill(0xFFFFFF, 1);
-    if (pl.countPosition < 400) {
-      pl.countPosition += pl.speed;
-      pl.drawCircle(100 + pl.countPosition, -100 - 2 * len, 5);
-    } else if (pl.countPosition > 399 && pl.countPosition < 599) {
-      pl.countPosition += pl.speed;
-      x = getPt(500, 500, pl.countPosition - 400);
-      y = getPt(-100, 0, pl.countPosition - 400);
-      pl.drawCircle(x + len, y, 5);
-    } else if (pl.countPosition < 999) {
-      pl.countPosition += pl.speed;
-      pl.drawCircle(500 + (601 - pl.countPosition), 100, 5);
-    } else if (pl.countPosition < 1199) {
-      pl.countPosition += pl.speed;
-      x = getPt(100, 100, pl.countPosition - 999);
-      y = getPt(100, 0, pl.countPosition - 999);
-      pl.drawCircle(x - len, y, 5);
-    } else {
-      pl.drawCircle(100, - 100 - 2 * len, 5);
-    }
-  }
+// var player = new PIXI.Graphics();
 
-  function getPt(n1, n2, perc) {
-    let diff = n2 - n1;
-    return n1 + (diff * perc/100);
-  }
+// player.lineStyle(0);
+// player.beginFill(0xFFFFFF, 1);
+// // player.drawCircle(200, 200, 150);
+// player.drawEllipse(200, 200, 380, 170);
+// player.endFill();
 
+// player.lineStyle(5, 0xFF0000, 1);
+// player.moveTo(200, 20);
+// player.lineTo(200, 40);
+
+// compassContainer.addChild(player);
+
+// app.stage.addChild(compassContainer);
+
+// compassContainer.position.set( 300, 300 );
+// compassContainer.pivot.x = compassContainer.width / 2;
+// compassContainer.pivot.y = compassContainer.height / 2;
+
+// app.ticker.add(function(delta) {
+//     // rotate the container!
+//     // use delta to create frame-independent tranform
+//     compassContainer.rotation += 0.01 * delta; // speed of rotation
+// });
+// // Rotate compass
+
+const app = new PIXI.Application({ transparent: true });
+document.getElementById('game-container').appendChild(app.view);
+var circle = new PIXI.drawEllipse(20, 20, 250, 80);
+circle.lineStyle(0);
+player.beginFill(0xFFFFFF, 1);
+player.endFill();
+var compassContainer = new PIXI.Container({ transparent: true });
+compassContainer.addChild(player);
+
+app.stage.addChild(compassContainer);
 </script>
-
 </html>
