@@ -4,6 +4,8 @@ const core = require("../core");
 const session = require('../core/session');
 const publicMethods = ['user.login', 'user.add'];
 const log = require("../logger").log;
+var wssConnections = require('./wssConnections');
+
 module.exports = {
   init: () => {
     var wss = new WebSocketServer({ port: config.webSocketServer.port });
@@ -42,8 +44,17 @@ module.exports = {
               core
                 .call(msg.method, msg.params, sessionValid)
                 .then(async function(res) {
-                  if (msg.method === 'user.login') {
-                    var token = await session.add(res);
+                  if (msg.method === 'user.login' || msg.method === 'user.check') {
+                    var token;
+                    if (msg.method === 'user.login') {
+                      token = await session.add(res);
+                    } else {
+                      token = msg.headers.jwtToken;
+                    }
+                    wssConnections.add(token, ws);
+                    var sessionValid = await session.verify(token);
+                    sessionValid.jwtToken = token;
+                    core.call('bet.subscribeEvent', msg.params, sessionValid);
                   }
                   let response = {
                     id: msg.id,
@@ -96,9 +107,6 @@ module.exports = {
           ws.send(`${e}`);
         }
       });
-      // setInterval(() => {
-      //   ws.send(`${Date.now()}`);
-      // }, 10000);
     });
   }
 };

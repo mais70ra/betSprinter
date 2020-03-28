@@ -43,6 +43,12 @@ function webSocketConnect(onReceive, onError) {
                         } else {
                             console.log('This request was timeout!');
                         }
+                    } else if(body.event) {
+                        if (eventHandler[body.event]) {
+                            eventHandler[body.event](body.params);
+                        } else {
+                            console.log('There is not event handler for this event ' + body.event);
+                        }
                     }
                 } catch (e) {
                     console.log("This doesn't look like a valid JSON: ", message.data);

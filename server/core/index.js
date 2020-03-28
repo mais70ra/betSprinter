@@ -1,7 +1,9 @@
 const modules = {
-    user: require('../modules/user')
+    user: require('../modules/user'),
+    bet: require('../modules/bet')
 };
 modules.user.init();
+modules.bet.init();
 const log = require('../logger').log;
 var trace = 0;
 const getTraceID = () => {

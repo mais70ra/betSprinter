@@ -1,4 +1,15 @@
 var betObject = {};
+var duration = 0;
+var eventHandler = {
+  pending: (msg) => {
+    duration = parseFloat(msg.bettingTime);
+    tween.restart();
+  },
+  active: (msg) => {
+    disableBets();
+    startTheGame(msg.winner, msg.gameDuration);
+  }
+};
 
 function logout() {
   reqWSC("user.logout", {})
@@ -68,7 +79,7 @@ function enableBets() {
 var tween = new TimelineMax({
   paused: true
 });
-var duration = 10;
+
 window.onload = function() {
   var lineAnimation = document.querySelector("#line-animation");
   var lineDurationNumber = document.querySelector("#line-duration-number");
@@ -84,8 +95,6 @@ window.onload = function() {
     onComplete: function() {
       lineDurationStatusText.innerHTML = "Game has been started, no more bets!";
       lineDurationNumber.style.display = "none";
-      startTheGame();
-      disableBets();
     },
     onStart: function() {
       lineDurationStatusText.innerHTML = "The game will start in: ";
