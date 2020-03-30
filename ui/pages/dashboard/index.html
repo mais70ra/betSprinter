@@ -78,10 +78,7 @@
   var app = new PIXI.Application(canvasWidth, canvasHeight, { antialias: true });
   document.getElementById('game-container').appendChild(app.view);
   var stage = new PIXI.Container();
-  //--------------
   stage.interactive = true;
-  // x = x + 1/2;
-  // y = y + 1/2;
   let stadiumWidht = 400;
   let stadiumHeight = 100;
   let trackWidth = 10;
@@ -90,44 +87,16 @@
   var players = [];
   function drawTrack(stadiumWidht, stadiumHeight, trackWidth, color, beginFillColor, index) {
     let roundBox = new PIXI.Graphics();
-    let x = canvasWidth/2 - stadiumWidht/2;
-    let y = canvasHeight/2 - stadiumHeight/2 - index * 10;
+    let x = canvasWidth / 2 - stadiumWidht / 2;
+    let y = canvasHeight / 2 - stadiumHeight / 2 - index * 10;
     if (beginFillColor) {
       roundBox.beginFill(beginFillColor);
     }
     roundBox.lineStyle(trackWidth, color, 1);
-    let radius = stadiumHeight / 1.78; // - trackWidth;
+    let radius = stadiumHeight / 1.78;
     roundBox.drawRoundedRect(0, 0, stadiumWidht, stadiumHeight, radius);
     roundBox.x = (canvasWidth - stadiumWidht) / 2;
     roundBox.y = (canvasHeight - stadiumHeight) / 2;
-    // roundBox.endFill();
-    // if (index === 0) {
-    //   roundBox.beginFill(0x008000, 1);
-    // }
-    // roundBox.lineStyle(10, color, 0.8);
-    // roundBox.moveTo(x, y);
-    // roundBox.lineTo(x + stadiumWidht, y);
-    // roundBox.quadraticCurveTo(
-    //   x + stadiumWidht + radius,
-    //   y + stadiumHeight - radius,
-    //   x + stadiumWidht,
-    //   y + stadiumHeight
-    // );
-    // roundBox.endFill();
-    // roundBox.quadraticCurveTo(0 - (index * 20), 200, 200, 300 + (index * 10));
-    // roundBox.lineTo(600, 300 + (i * 10));
-    // roundBox.quadraticCurveTo(800 + (i * 20), 200, 600, 100 - (i * 10));
-    // roundBox.lineTo(200, 100 - (i * 10));
-
-    // roundBox.lineStyle(trackWidth, color, 0.8);
-    // roundBox.moveTo(x, y);
-    // roundBox.lineTo(stadiumWidht - radius, y);
-    // roundBox.quadraticCurveTo(stadiumWidht, radius, stadiumWidht - radius, stadiumHeight);
-    // roundBox.moveTo(x + stadiumWidht - radius, y);
-    // roundBox.quadraticCurveTo(x + stadiumWidht, y, x + stadiumWidht - radius, y + stadiumHeight);
-    // roundBox.lineTo(600, 300 + (index * 10));
-    // roundBox.quadraticCurveTo(800 + (index * 20), 200, 600, 100 - (index * 10));
-    // roundBox.lineTo(200, 100 - (index * 10));
     roundBox.endFill();
 
     let player = new PIXI.Graphics();
@@ -150,198 +119,108 @@
   let numberOfPlayers = colors.length;
   for (var i = 0; i < numberOfPlayers; i++) {
     drawTrack(stadiumWidht + i * 2 * trackWidth, stadiumHeight + i * 2 * trackWidth, trackWidth, colors[i], beginFillColors[i], i);
-    // drawTrack(stadiumWidht, stadiumHeight, trackWidth, colors[i], beginFillColors[i], i);
   }
-  let x = canvasWidth/2 - stadiumWidht/2;
-  let y = canvasHeight/2 - stadiumHeight/2;
-  // let roundBox = new PIXI.Graphics();
-  // roundBox.beginFill(0x008000, 1);
-  // roundBox.lineStyle(10, colors[0], 0.8);
-  // roundBox.moveTo(x, y);
-  // roundBox.lineTo(stadiumWidht, y);
-  // roundBox.endFill();
-  // stage.addChild(roundBox);
-
-  // renderer.render(stage);
-  function animate() {
-    players.forEach(player => {
-      playerAnimation(player, 1);
-    });
-    // renderer.render(stage);
-    // requestAnimationFrame(animate);
-  }
-
-  function calculateTurn(xy, radius, diff) {
-    let a = Math.abs(xy - diff);
-    let b = radius * Math.sqrt(1 - (a / radius) * (a / radius));
-    return radius - b;
-  }
-
-  function playerAnimation(player, speed) {
-    speed = player.speedCoefficient * speed;
-    player.beginFill(0xFFFFFF);
-    if (player.x >= player.radius && player.x < player.stadiumWidht && player.y <= player.radius) {
-      player.x = player.x + speed;
-      if (player.x > player.stadiumWidht) {
-        player.x = player.stadiumWidht;
-      } else if (player.x >= player.stadiumWidht - player.radius) {
-        player.y = calculateTurn(player.x, player.radius, player.stadiumWidht - player.radius);
-      }
-    } else if (player.x >= player.stadiumWidht - player.radius && player.y < player.stadiumHeight) {
-      player.y = player.y + speed;
-      if (player.y > player.stadiumHeight) {
-        player.y = player.stadiumHeight;
-      } else if (player.y > player.stadiumHeight - player.radius) {
-        player.x = player.stadiumWidht - calculateTurn(player.y, player.radius, player.stadiumHeight - player.radius);
-      }
-    } else if (player.x <= player.stadiumWidht - player.radius && player.y > player.stadiumHeight - player.radius) {
-      player.x = player.x - speed;
-      if (player.x < 0) {
-        player.x = 0;
-      }
-      if (player.x < player.radius) {
-        player.y = player.stadiumHeight - calculateTurn(player.x, player.radius, player.radius);
-      }
-    } else {
-      player.y = player.y - speed;
-      if (player.y < 0) {
-        player.y = 0;
-      }
-      if (player.y < player.radius) {
-        player.x = calculateTurn(player.y, player.radius, player.radius);
-      }
-    }
-    player.drawCircle(0, 0, 5);
-
-  }
-  // animate();
   app.stage.addChild(stage);
-  app.ticker.add(delta => gameLoop(delta));
-  app.ticker.speed = 2;
-  function gameLoop(delta) {
-    animate();
-  }
-  // return;
-  app.ticker.stop();
-  // setTimeout(() => {
-  //   app.ticker.start();
-  // }, 1000);
 
-  // var fps = 60;
-  var fps = 60;
-  var percent = 0
-  var direction = 0.2;
-  players.forEach(player => {
-    player.percent = 0;
-    animate2.call(player);
-  });
-  // animate2();
-
-  function animate2() {
-    // set the animation position (0-100)
-    let player = this;
-    player.percent += direction;
-    if (player.percent > 100) {
+  function startGame() {
+    var fps = 60;
+    var percent = 0
+    var direction = 0.2;
+    players.forEach(player => {
       player.percent = 0;
-    } else {
-      draw(player.percent, this);
-      setTimeout(function () {
-        requestAnimationFrame(animate2.bind(player));
-      }, 1000 / fps);
+      animate.call(player);
+    });
+
+    function animate() {
+      // set the animation position (0-100)
+      let player = this;
+      player.percent += direction;
+      if (player.percent > 100) {
+        player.percent = 0;
+      } else {
+        draw(player.percent, this);
+        setTimeout(function () {
+          requestAnimationFrame(animate.bind(player));
+        }, 1000 / fps);
+      }
+    }
+
+    function draw(sliderValue, player) {
+      // draw the tracking rectangle
+      var xy;
+
+      if (sliderValue < 25) {
+        var percent = sliderValue / 24;
+        xy = getLineXYatPercent({
+          x: player.radius,
+          y: 0
+        }, {
+          x: player.stadiumWidht - player.radius,
+          y: 0
+        }, percent);
+      } else if (sliderValue < 50) {
+        var percent = (sliderValue - 25) / 24
+        xy = getQuadraticBezierXYatPercent({
+          x: player.stadiumWidht - player.radius,
+          y: 0
+        }, {
+          x: player.stadiumWidht + player.radius,
+          y: player.radius
+        }, {
+          x: player.stadiumWidht - player.radius,
+          y: player.stadiumHeight
+        }, percent);
+      } else if (sliderValue < 75) {
+        var percent = (sliderValue - 50) / 24
+        xy = getLineXYatPercent({
+          x: player.stadiumWidht - player.radius,
+          y: player.stadiumHeight
+        }, {
+          x: player.radius,
+          y: player.stadiumHeight
+        }, percent);
+      } else {
+        var percent = (sliderValue - 75) / 25
+        xy = getQuadraticBezierXYatPercent({
+          x: player.radius,
+          y: player.stadiumHeight
+        }, {
+          x: 0 - player.radius - 10,
+          y: player.stadiumHeight / 2
+        }, {
+          x: player.radius,
+          y: 0
+        }, percent);
+      }
+      player.x = xy.x;
+      player.y = xy.y;
+      player.drawCircle(0, 0, 5);
+      app.render(stage);
+    }
+
+    function getLineXYatPercent(startPt, endPt, percent) {
+      var dx = endPt.x - startPt.x;
+      var dy = endPt.y - startPt.y;
+      var X = startPt.x + dx * percent;
+      var Y = startPt.y + dy * percent;
+      return ({
+        x: X,
+        y: Y
+      });
+    }
+
+    // quadratic bezier: percent is 0-1
+    function getQuadraticBezierXYatPercent(startPt, controlPt, endPt, percent) {
+      var x = Math.pow(1 - percent, 2) * startPt.x + 2 * (1 - percent) * percent * controlPt.x + Math.pow(percent, 2) * endPt.x;
+      var y = Math.pow(1 - percent, 2) * startPt.y + 2 * (1 - percent) * percent * controlPt.y + Math.pow(percent, 2) * endPt.y;
+      return ({
+        x: x,
+        y: y
+      });
     }
   }
 
-
-  function draw(sliderValue, player) {
-    // draw the tracking rectangle
-    var xy;
-
-    if (sliderValue < 25) {
-      var percent = sliderValue / 24;
-      xy = getLineXYatPercent({
-        x: player.radius,
-        y: 0
-      }, {
-        x: player.stadiumWidht - player.radius,
-        y: 0
-      }, percent);
-    } else if (sliderValue < 50) {
-      var percent = (sliderValue - 25) / 24
-      xy = getQuadraticBezierXYatPercent({
-        x: player.stadiumWidht - player.radius,
-        y: 0
-      }, {
-        x: player.stadiumWidht + player.radius,
-        y: player.radius
-      }, {
-        x: player.stadiumWidht - player.radius,
-        y: player.stadiumHeight
-      }, percent);
-    } else if (sliderValue < 75) {
-      var percent = (sliderValue - 50) / 24
-      xy = getLineXYatPercent({
-        x: player.stadiumWidht - player.radius,
-        y: player.stadiumHeight
-      }, {
-        x: player.radius,
-        y: player.stadiumHeight
-      }, percent);
-    } else {
-      var percent = (sliderValue - 75) / 25
-      xy = getQuadraticBezierXYatPercent({
-        x: player.radius,
-        y: player.stadiumHeight
-      }, {
-        x: 0 - player.radius - 10,
-        y: player.stadiumHeight/2
-      }, {
-        x: player.radius,
-        y: 0
-      }, percent);
-    }
-    player.x = xy.x;
-    player.y = xy.y;
-    player.drawCircle(0, 0, 5);
-    app.render(stage);
-  }
-
-  function getLineXYatPercent(startPt, endPt, percent) {
-    var dx = endPt.x - startPt.x;
-    var dy = endPt.y - startPt.y;
-    var X = startPt.x + dx * percent;
-    var Y = startPt.y + dy * percent;
-    return ({
-      x: X,
-      y: Y
-    });
-  }
-
-  // quadratic bezier: percent is 0-1
-  function getQuadraticBezierXYatPercent(startPt, controlPt, endPt, percent) {
-    var x = Math.pow(1 - percent, 2) * startPt.x + 2 * (1 - percent) * percent * controlPt.x + Math.pow(percent, 2) * endPt.x;
-    var y = Math.pow(1 - percent, 2) * startPt.y + 2 * (1 - percent) * percent * controlPt.y + Math.pow(percent, 2) * endPt.y;
-    return ({
-      x: x,
-      y: y
-    });
-  }
-
-  // cubic bezier percent is 0-1
-  function getCubicBezierXYatPercent(startPt, controlPt1, controlPt2, endPt, percent) {
-    var x = CubicN(percent, startPt.x, controlPt1.x, controlPt2.x, endPt.x);
-    var y = CubicN(percent, startPt.y, controlPt1.y, controlPt2.y, endPt.y);
-    return ({
-      x: x,
-      y: y
-    });
-  }
-
-  // cubic helper formula at percent distance
-  function CubicN(pct, a, b, c, d) {
-    var t2 = pct * pct;
-    var t3 = t2 * pct;
-    return a + (-a * 3 + pct * (3 * a - a * pct)) * pct + (3 * b + pct * (-6 * b + b * 3 * pct)) * pct + (c * 3 - c * 3 * pct) * t2 + d * t3;
-  }
+  startGame();
 
 </script>
 
