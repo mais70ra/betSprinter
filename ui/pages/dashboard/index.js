@@ -79,7 +79,7 @@ function finishBet() {
     let selectedAmount = document.getElementsByClassName("btn-amount-selected");
     selectedPlayer[0].classList.add("btn-player-confirmed");
     selectedAmount[0].classList.add("btn-amount-confirmed");
-    document.getElementById('balance').innerHTML = parseFloat(document.getElementById('balance').innerHTML) + betObject.amount;
+    document.getElementById('balance').innerHTML = parseFloat(document.getElementById('balance').innerHTML) - betObject.amount;
     disableBets();
   })
   .catch(e => {
