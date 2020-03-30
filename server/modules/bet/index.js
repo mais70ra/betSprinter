@@ -1,9 +1,9 @@
 "use strict";
 const database = require("./db");
-const { Sequelize } = require('sequelize');
-var session = require('../../core/session');
-const wssc = require('../../webSocketServer/wssConnections');
-const log = require('../../logger').log;
+const { Sequelize } = require("sequelize");
+var session = require("../../core/session");
+const wssc = require("../../webSocketServer/wssConnections");
+const log = require("../../logger").log;
 var db;
 var config = {
   gameDuration: {
@@ -14,20 +14,47 @@ var config = {
   },
   playerNumbers: 8
 };
-
+var core;
 module.exports = {
-  init: () => {
-    database.init()
-    .then(r => {
+  init: c => {
+    database.init().then(r => {
       db = r;
     });
+    core = c;
   },
   startBet: async function(msg, meta) {
     return resp;
   },
-  edit: (msg, meta) => {},
-  get: msg => {
-    return;
+  setBets: async function(msg, meta) {
+    let account = await core.call("account.get", {}, meta);
+    if (!account[0]) {
+      throw new Error("Account not found!");
+    }
+    if (account[0].balance - msg.amount <= 0) {
+      throw new Error("Insufficient balance!");
+    }
+    try {
+      await db.update(
+        {
+          chosenPlayer: msg.playerNumber,
+          chosenAmount: msg.amount
+        },
+        {
+          where: {
+            id: msg.betId,
+            userId: meta.data.id
+          }
+        }
+      );
+      await account[0].update({
+        balance: account[0].balance - msg.amount
+      });
+    } catch (e) {
+      throw new Error("Bet was not accepted, please try with the next game!");
+    }
+    return Promise.resolve({
+      success: true
+    });
   },
   check: async function(msg, meta) {
     return;
@@ -37,7 +64,7 @@ module.exports = {
       where: {
         userId: meta.data.id,
         status: {
-          [Sequelize.Op.not]: 'closed'
+          [Sequelize.Op.not]: "closed"
         }
       }
     });
@@ -51,26 +78,14 @@ module.exports = {
       var betObject = await db.create(betObject);
       sendMessage("pending", {
         status: betObject.status,
-        bettingTime: config.gameDuration.bettingTime
+        bettingTime: config.gameDuration.bettingTime,
+        id: betObject.id
       });
       setTimeout(async function() {
-        betObject.status = "active";
-        betObject.winner = getWinners();
-        sendMessage("active", {
-          winner: betObject.winner,
-          status: betObject.status,
-          gameDuration: {
-            game: config.gameDuration.game,
-            winningAnimation: config.gameDuration.winningAnimation,
-            idleTime: config.gameDuration.winningAnimation
-          }
-        });
-        betObject.winner = JSON.stringify(betObject.winner);
-        await betObject.save();
         setTimeout(async function() {
           betObject.status = "closed";
           betObject.endtDateTime = Date.now();
-          await betObject.save(); 
+          await betObject.save();
           try {
             if (session.verify(meta.jwtToken)) {
               startGame();
@@ -79,22 +94,51 @@ module.exports = {
             // session expired - stop the loop
             log.error(e);
           }
-        }, (config.gameDuration.game + config.gameDuration.winningAnimation + config.gameDuration.idleTime) * 1000);
+        }, (config.gameDuration.game +
+          config.gameDuration.winningAnimation +
+          config.gameDuration.idleTime) *
+          1000);
+        betObject = await betObject.reload();
+        betObject.status = "active";
+        betObject.winner = getWinners();
+        sendMessage("active", {
+          winner: betObject.winner,
+          status: betObject.status,
+          id: betObject.id,
+          gameDuration: {
+            game: config.gameDuration.game,
+            winningAnimation: config.gameDuration.winningAnimation,
+            idleTime: config.gameDuration.winningAnimation
+          }
+        });
+        if (betObject.winner[betObject.chosenPlayer - 1] === config.playerNumbers) {
+          let account = await core.call("account.get", {}, meta);
+          await account[0].update({
+            balance: account[0].balance + betObject.chosenAmount * 2
+          });
+        }
+        betObject.winner = JSON.stringify(betObject.winner);
+        await betObject.save();
       }, config.gameDuration.bettingTime * 1000);
     }
     if (resp.length === 0) {
       startGame();
     } else {
       var response;
-      if (resp[0].status === 'pending') {
+      if (resp[0].status === "pending") {
         response = {
           status: resp[0].status,
-          bettingTime: parseFloat(config.gameDuration.bettingTime - ((Date.now() - resp[0].startDateTime) / 1000)).toFixed(2)
+          id: resp[0].id,
+          bettingTime: parseFloat(
+            config.gameDuration.bettingTime -
+              (Date.now() - resp[0].startDateTime) / 1000
+          ).toFixed(2)
         };
       } else {
         response = {
           winner: JSON.parse(resp[0].winner),
           status: resp[0].status,
+          id: resp[0].id,
           gameDuration: {
             game: config.gameDuration.game,
             winningAnimation: config.gameDuration.winningAnimation,
@@ -110,7 +154,7 @@ module.exports = {
         params: params
       });
     }
-    return ;
+    return;
   }
 };
 
@@ -132,5 +176,6 @@ function shuffle(a) {
 }
 
 function getWinners() {
+  return [1, 2, 3, 4, 8, 6, 7, 5];
   return shuffle(players);
 }

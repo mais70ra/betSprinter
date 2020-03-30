@@ -1,9 +1,9 @@
 const modules = {
     user: require('../modules/user'),
-    bet: require('../modules/bet')
+    bet: require('../modules/bet'),
+    account: require('../modules/account')
 };
-modules.user.init();
-modules.bet.init();
+
 const log = require('../logger').log;
 var trace = 0;
 const getTraceID = () => {
@@ -14,7 +14,7 @@ const getTraceID = () => {
     // Internal method communication id
     return 'IMC' + trace;
 };
-module.exports = {
+const core = {
     call: async function (...params) {
         // in params we have one or more paramaters
         // the first paramater is aways the method
@@ -76,3 +76,8 @@ module.exports = {
         }
     }
 };
+modules.user.init(core);
+modules.bet.init(core);
+modules.account.init(core);
+
+module.exports = core;

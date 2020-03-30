@@ -140,6 +140,15 @@ button.btn-player.btn.btn-blue.btn-player-selected{
 button.btn-amount.btn.btn-blue.btn-amount-selected{
     background-color:rgb(65, 225, 92) !important;
 }
+button.btn-player-confirmed{
+    background-color:rgb(65, 225, 92) !important;
+}
+button.btn-amount-confirmed{
+    background-color:rgb(65, 225, 92) !important;
+}
+.profile{
+  font-size: larger;
+}
 /*====================================================*/
 .btn-green {
   background-color: #66ffb3; /* Green background */
@@ -176,4 +185,5 @@ button.btn-amount.btn.btn-blue.btn-amount-selected{
 .btn:disabled {
     background-color: #cccccc;
     color: #666666;
+    cursor: no-drop;
 }

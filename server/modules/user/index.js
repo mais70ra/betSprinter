@@ -3,17 +3,23 @@ var database = require('./db');
 var session = require('../../core/session');
 var CryptoJS = require('crypto-js');
 var db;
+var core;
 
 module.exports = {
-  init: () => {
+  init: (c) => {
     database.init()
     .then(r => {
       db = r;
     });
+    core = c;
   },
   add: async function(msg, meta) {
     msg.password = CryptoJS.MD5(msg.password).toString();
     let resp = await db.create(msg);
+    await core.call('account.create', {
+      userId: resp.id,
+      balance: 200
+    });
     delete resp.password;
     return resp;
   },
@@ -48,7 +54,11 @@ module.exports = {
     }
   },
   check: async function(msg, meta) {
-    return;
+    let account = await core.call('account.get', {}, meta);
+    return {
+      name: meta.data.firstName + ' ' + meta.data.lastName,
+      balance: account[0].balance
+    };
   },
   logout: async function(msg, meta) {
     session.delete(meta.jwtToken);

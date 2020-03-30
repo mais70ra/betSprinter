@@ -22,7 +22,11 @@
 
 <body>
   <div class="bar">
-    <link rel="shortcut icon" href="favicon.ico" type="/static/images/logout-32.png" />
+    <div class="profile left">
+      <span id="name"></span>
+      <span> :</span>
+      <span id="balance"></span><span>USD</span>
+    </div>
     <img src="/static/images/logout.png" alt="Logout" class="logoutImage pointer right" onclick="logout()">
   </div>
   <div class="b"></div>
@@ -37,10 +41,6 @@
       <div id="line-animation"></div>
       <div id="line-path"></div>
       <div class="clear p5"></div>
-      <div class="nav">
-        <button id="play" onclick="tween.play()">play()</button>
-        <button id="restart" onclick="tween.restart()">restart()</button>
-      </div>
       <div class="clear p5"></div>
       <div class="bet-container-player">
         <label id="choosePlayer">Choose player</label>
@@ -66,7 +66,7 @@
       <div class="clear p5"></div>
       <div class="bet-container-finish">
         <div class="clear p5"></div>
-        <button class="btn btn-green" onclick="finishBet(this);">Finish bet</button>
+        <button id="submitBet" class="btn btn-green" onclick="finishBet(this);">Finish bet</button>
         <div class="clear p5"></div>
       </div>
     </div>
@@ -122,19 +122,18 @@
   }
   app.stage.addChild(stage);
 
-  function startGame() {
+  function startGame(winners, durations) {
     var fps = 60;
-    var percent = 0
-    var direction = 0.2;
-    players.forEach(player => {
+    players.forEach((player, index) => {
       player.percent = 0;
+      player.speed = 0.1 + winners[index] * 0.0025;
       animate.call(player);
     });
 
     function animate() {
       // set the animation position (0-100)
       let player = this;
-      player.percent += direction;
+      player.percent += player.speed;
       if (player.percent > 100) {
         player.percent = 0;
       } else {
@@ -220,7 +219,7 @@
     }
   }
 
-  startGame();
+  // startGame();
 
 </script>
 

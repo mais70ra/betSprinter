@@ -98,7 +98,8 @@ webSocketConnect().then(r => {
 
     reqWSC('user.check', {})
     .then(r => {
-
+        document.getElementById('name').innerHTML = r.result.name;
+        document.getElementById('balance').innerHTML = r.result.balance;
     })
     .catch(e => {
 
