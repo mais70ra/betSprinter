@@ -83,32 +83,51 @@
   // x = x + 1/2;
   // y = y + 1/2;
   let stadiumWidht = 400;
-  let stadiumHeight = 80;
+  let stadiumHeight = 100;
   let trackWidth = 10;
   let colors = [0xF47E48, 0x3858A7, 0xEE3160, 0x34C0C7, 0x90C73E, 0xC04599, 0xF7F04E, 0x8B2E1B];
   let beginFillColors = [0x74C043];
   var players = [];
   function drawTrack(stadiumWidht, stadiumHeight, trackWidth, color, beginFillColor, index) {
     let roundBox = new PIXI.Graphics();
-    // if (beginFillColor) {
-    //   roundBox.beginFill(beginFillColor);
-    // }
-    // roundBox.lineStyle(trackWidth, color, 1);
-    // let radius = stadiumHeight / 2; // - trackWidth;
-    // roundBox.drawRoundedRect(0, 0, stadiumWidht, stadiumHeight, radius);
-    // roundBox.x = (canvasWidth - stadiumWidht) / 2;
-    // roundBox.y = (canvasHeight - stadiumHeight) / 2;
-    // roundBox.endFill();
-    if (i === 0) {
-      roundBox.beginFill(0x008000, 1);
+    let x = canvasWidth/2 - stadiumWidht/2;
+    let y = canvasHeight/2 - stadiumHeight/2 - index * 10;
+    if (beginFillColor) {
+      roundBox.beginFill(beginFillColor);
     }
-    let radius = stadiumHeight / 2;
-    roundBox.lineStyle(trackWidth, color, 0.8);
-    roundBox.moveTo(200, 100 - (index * 10));
-    roundBox.quadraticCurveTo(0 - (index * 20), 200, 200, 300 + (index * 10));
-    roundBox.lineTo(600, 300 + (index * 10));
-    roundBox.quadraticCurveTo(800 + (index * 20), 200, 600, 100 - (index * 10));
-    roundBox.lineTo(200, 100 - (index * 10));
+    roundBox.lineStyle(trackWidth, color, 1);
+    let radius = stadiumHeight / 1.78; // - trackWidth;
+    roundBox.drawRoundedRect(0, 0, stadiumWidht, stadiumHeight, radius);
+    roundBox.x = (canvasWidth - stadiumWidht) / 2;
+    roundBox.y = (canvasHeight - stadiumHeight) / 2;
+    // roundBox.endFill();
+    // if (index === 0) {
+    //   roundBox.beginFill(0x008000, 1);
+    // }
+    // roundBox.lineStyle(10, color, 0.8);
+    // roundBox.moveTo(x, y);
+    // roundBox.lineTo(x + stadiumWidht, y);
+    // roundBox.quadraticCurveTo(
+    //   x + stadiumWidht + radius,
+    //   y + stadiumHeight - radius,
+    //   x + stadiumWidht,
+    //   y + stadiumHeight
+    // );
+    // roundBox.endFill();
+    // roundBox.quadraticCurveTo(0 - (index * 20), 200, 200, 300 + (index * 10));
+    // roundBox.lineTo(600, 300 + (i * 10));
+    // roundBox.quadraticCurveTo(800 + (i * 20), 200, 600, 100 - (i * 10));
+    // roundBox.lineTo(200, 100 - (i * 10));
+
+    // roundBox.lineStyle(trackWidth, color, 0.8);
+    // roundBox.moveTo(x, y);
+    // roundBox.lineTo(stadiumWidht - radius, y);
+    // roundBox.quadraticCurveTo(stadiumWidht, radius, stadiumWidht - radius, stadiumHeight);
+    // roundBox.moveTo(x + stadiumWidht - radius, y);
+    // roundBox.quadraticCurveTo(x + stadiumWidht, y, x + stadiumWidht - radius, y + stadiumHeight);
+    // roundBox.lineTo(600, 300 + (index * 10));
+    // roundBox.quadraticCurveTo(800 + (index * 20), 200, 600, 100 - (index * 10));
+    // roundBox.lineTo(200, 100 - (index * 10));
     roundBox.endFill();
 
     let player = new PIXI.Graphics();
@@ -131,7 +150,18 @@
   let numberOfPlayers = colors.length;
   for (var i = 0; i < numberOfPlayers; i++) {
     drawTrack(stadiumWidht + i * 2 * trackWidth, stadiumHeight + i * 2 * trackWidth, trackWidth, colors[i], beginFillColors[i], i);
+    // drawTrack(stadiumWidht, stadiumHeight, trackWidth, colors[i], beginFillColors[i], i);
   }
+  let x = canvasWidth/2 - stadiumWidht/2;
+  let y = canvasHeight/2 - stadiumHeight/2;
+  // let roundBox = new PIXI.Graphics();
+  // roundBox.beginFill(0x008000, 1);
+  // roundBox.lineStyle(10, colors[0], 0.8);
+  // roundBox.moveTo(x, y);
+  // roundBox.lineTo(stadiumWidht, y);
+  // roundBox.endFill();
+  // stage.addChild(roundBox);
+
   // renderer.render(stage);
   function animate() {
     players.forEach(player => {
@@ -198,9 +228,9 @@
   // }, 1000);
 
   // var fps = 60;
-  var fps = 20;
+  var fps = 60;
   var percent = 0
-  var direction = 1;
+  var direction = 0.2;
   players.forEach(player => {
     player.percent = 0;
     animate2.call(player);
@@ -241,8 +271,8 @@
         x: player.stadiumWidht - player.radius,
         y: 0
       }, {
-        x: player.stadiumWidht + player.radius + 10,
-        y: player.stadiumHeight/2
+        x: player.stadiumWidht + player.radius,
+        y: player.radius
       }, {
         x: player.stadiumWidht - player.radius,
         y: player.stadiumHeight
