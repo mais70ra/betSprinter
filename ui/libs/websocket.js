@@ -12,20 +12,12 @@ function webSocketConnect(onReceive, onError) {
             // if user is running mozilla then use it's built-in WebSocket
             window.WebSocket = window.WebSocket || window.MozWebSocket;
             
-            webSocket = new WebSocket("ws://127.0.0.1:40510");
+            webSocket = new WebSocket("ws://" + window.location.host.split(':')[0] + ":40510");
 
             webSocket.onopen = function() {
                 console.log('websocket is connected ...')
                 resolve();
             };
-            // webSocket.send('oooooooooo'); // invalid json
-            // webSocket.send('{id: 1}'); // invalid json
-            // webSocket.send('{"id": 1}'); // valid json
-            // webSocket.send('{"id": 1, method: "user.add"}'); // invalid json
-            // webSocket.send('{"id": 1, "method": "user.add"}'); // invalid json
-            // setInterval(() => {
-            //     webSocket.send('{"id": 1, "method": "user.add"}'); // valid json
-            // }, 1000);
             
             webSocket.onerror = function(error) {
                 console.log(error);
@@ -102,7 +94,7 @@ webSocketConnect().then(r => {
         document.getElementById('balance').innerHTML = r.result.balance;
     })
     .catch(e => {
-
+        // window.location = '/pages/login/';
     });
 });
 

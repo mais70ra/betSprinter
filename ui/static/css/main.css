@@ -11,7 +11,9 @@ input {
 }
 
 #login {
-  background-color: #ffffff;
+  background-color: #F5F5F5;
+  border-bottom: 1px solid #dddfe2;
+  border-radius: 0 0 5px 5px;
   width: 30%;
   position: absolute;
   top: 30%;
@@ -147,7 +149,13 @@ button.btn-amount-confirmed{
     background-color:rgb(65, 225, 92) !important;
 }
 .profile{
+  padding: 0;
+  color: white;
+  margin: 0;
+  font-weight: bold;
   font-size: larger;
+  margin-top:12px;
+  margin-left:12px;
 }
 /*====================================================*/
 .btn-green {
@@ -162,12 +170,28 @@ button.btn-amount-confirmed{
   margin: auto;
   width: 50%;
 }
+.bet-container-player { 
+  margin: 0 auto; 
+  width: 560;
+  text-align: center;
+}
+
+.bet-container-amount {
+  margin: 0 auto; 
+  width: 560;
+  text-align: center;
+}
+.bet-container-finish {
+  margin: 0 auto; 
+  width: 560;
+  text-align: center;
+}
 
 #line-path {
     width: 100%;
     height: 3px;
     margin-top: -3px;
-    background: #DCDCDC;
+    background: rgba(191, 187, 186, 1);
 }
 
 #line-animation {
@@ -244,9 +268,10 @@ button.btn-amount-confirmed{
 }
 
 .modal-header {
-  padding: 2px 16px;
+  padding: 10px 16px;
   background-color: #6699ff;
   color: white;
+  text-align: center;
 }
 
 .modal-body {
@@ -255,5 +280,6 @@ button.btn-amount-confirmed{
   margin-block-end: 1em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
+  text-align: center;
 }
 /**************Popup******************/
