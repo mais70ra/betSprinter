@@ -122,11 +122,12 @@
   }
   app.stage.addChild(stage);
 
-  function startGame(winners, durations) {
+  function startGame(msgBet) {
     var fps = 60;
     players.forEach((player, index) => {
       player.percent = 0;
-      player.speed = 0.1 + winners[index] * 0.0025;
+      player.speed = 0.1 + msgBet.winner[index] * 0.0025;
+      player.lastPlayer = msgBet.winner[index] === 1;
       animate.call(player);
     });
 
@@ -136,6 +137,9 @@
       player.percent += player.speed;
       if (player.percent > 100) {
         player.percent = 0;
+        if (player.lastPlayer) {
+          animateWinner(msgBet);
+        }
       } else {
         draw(player.percent, this);
         setTimeout(function () {
@@ -219,6 +223,12 @@
     }
   }
 
+  function animateWinner(msgBet) {
+    if(msgBet.isUserWin) {
+      document.getElementById('balance').innerHTML = parseFloat(document.getElementById('balance').innerHTML) + msgBet.amount * 2;
+      alert('You win!');
+    }
+  }
   // startGame();
 
 </script>

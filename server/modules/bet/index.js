@@ -105,6 +105,8 @@ module.exports = {
           winner: betObject.winner,
           status: betObject.status,
           id: betObject.id,
+          isUserWin: betObject.winner[betObject.chosenPlayer - 1] === config.playerNumbers,
+          amount: betObject.winner[betObject.chosenPlayer - 1] === config.playerNumbers ? betObject.chosenAmount : 0,
           gameDuration: {
             game: config.gameDuration.game,
             winningAnimation: config.gameDuration.winningAnimation,
@@ -158,11 +160,6 @@ module.exports = {
   }
 };
 
-let totalTime =
-  config.gameDuration.bettingTime +
-  config.gameDuration.winningAnimation +
-  config.gameDuration.idleTime +
-  config.gameDuration.game;
 var players = [];
 for (var n = 1; n < config.playerNumbers + 1; n++) {
   players.push(n);

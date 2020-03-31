@@ -13,7 +13,7 @@ var eventHandler = {
     );
     lineDurationStatusText.innerHTML = "Game has been started, no more bets!";
     lineDurationNumber.style.display = "none";
-    startGame(msg.winner, msg.gameDuration);
+    startGame(msg);
   }
 };
 
