@@ -20,6 +20,14 @@ function validateForm(name) {
     return obj;
 }
 
+function clearForm(name) {
+    var arr = document.forms[name].getElementsByTagName("input");
+    var len = arr.length;
+    for (var i=0; i < len; i++ ) {
+        arr[i].value = undefined;
+    }
+}
+
 function getCookie(name){
     var pattern = RegExp(name + "=.[^;]*")
     var matched = document.cookie.match(pattern)

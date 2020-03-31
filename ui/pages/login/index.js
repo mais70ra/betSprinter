@@ -32,6 +32,8 @@ function registerUser() {
     reqWSC('user.add', msg)
     .then(r => {
         popup.success('Successful registration, you can login now!');
+        clearForm('registrationForm');
+        showRegister();
     })
     .catch(e => {
         popup.error(e.message);

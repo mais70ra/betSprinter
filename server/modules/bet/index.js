@@ -220,7 +220,7 @@ function shuffle(a) {
 }
 
 function getWinners() {
-  return [1, 2, 3, 4, 8, 6, 7, 5];
+  // return [1, 2, 3, 4, 8, 6, 7, 5];
   return shuffle(players);
 }
 
