@@ -95,6 +95,7 @@ function betOnPlayer(btn, playerNumber) {
   function tweenInitiation(msg) {
     var duration = parseFloat(msg.bettingTime);
     var lineAnimation = document.querySelector("#line-animation");
+    lineAnimation.style.backgroundColor = '';
     var lineDurationNumber = document.querySelector("#line-duration-number");
     var lineDurationStatusText = document.querySelector(
       "#line-duration-status-text"
