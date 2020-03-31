@@ -28,7 +28,7 @@ module.exports = {
     return resp;
   },
   setBets: async function(msg, meta) {
-    if ([1, 5, 10, 20].indexOf(msg.amount) === -1) {
+    if ([1, 5, 10, 20, 50].indexOf(msg.amount) === -1) {
       throw new Error("Invalid amount!");
     }
     if ([1, 2, 3, 4, 5, 6, 7, 8].indexOf(msg.playerNumber) === -1) {
