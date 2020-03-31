@@ -115,7 +115,7 @@ function startGame(msgBet) {
     // draw the tracking rectangle
     var xy;
     if (sliderValue < 25) {
-      var percent = sliderValue / 24;
+      var percent = sliderValue / 25;
       xy = getLineXYatPercent(
         {
           x: player.radius,
@@ -128,7 +128,7 @@ function startGame(msgBet) {
         percent
       );
     } else if (sliderValue < 50) {
-      var percent = (sliderValue - 25) / 24;
+      var percent = (sliderValue - 25) / 25;
       xy = getQuadraticBezierXYatPercent(
         {
           x: player.stadiumWidht - player.radius,
@@ -140,12 +140,12 @@ function startGame(msgBet) {
         },
         {
           x: player.stadiumWidht - player.radius,
-          y: player.stadiumHeight - trackWidth
+          y: player.stadiumHeight
         },
         percent
       );
     } else if (sliderValue < 75) {
-      var percent = (sliderValue - 50) / 24;
+      var percent = (sliderValue - 50) / 25;
       xy = getLineXYatPercent(
         {
           x: player.stadiumWidht - player.radius,
@@ -165,7 +165,7 @@ function startGame(msgBet) {
           y: player.stadiumHeight
         },
         {
-          x: 0 - player.radius - 10,
+          x: 0 - player.radius,
           y: player.stadiumHeight / 2
         },
         {
@@ -177,6 +177,7 @@ function startGame(msgBet) {
     }
     player.x = xy.x;
     player.y = xy.y;
+    player.xy = xy;
     player.drawCircle(0, 0, 5);
     app.render(stage);
   }
