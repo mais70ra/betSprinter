@@ -21,7 +21,7 @@ function animateWinner(msgBet) {
   if (msgBet.isUserWin) {
     document.getElementById("balance").innerHTML =
       parseFloat(document.getElementById("balance").innerHTML) + msgBet.amount;
-      document.getElementById("winnerMessage").innerHTML = "Congrats, you win ";
+      document.getElementById("winnerMessage").innerHTML = "Congrats, you won ";
     var Cont = { val: 0 },
       NewVal = msgBet.amount;
       if (msgBet.gameDuration.winningAnimation <= 0) {
@@ -31,7 +31,7 @@ function animateWinner(msgBet) {
           val: NewVal,
           roundProps: "val",
           onUpdate: function() {
-            document.getElementById("amountWon").innerHTML = Cont.val;
+            document.getElementById("amountWon").innerHTML = Cont.val + ' USD';
           }
         });
       }

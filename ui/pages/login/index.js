@@ -3,7 +3,7 @@ function login() {
     reqWSC('user.login', msg)
     .then(r => {
         setCookie('jwtToken', r.token);
-        popup.success(JSON.stringify(r));
+        popup.success('Successful login!');
         window.location = '/pages/dashboard/';
     })
     .catch(e => {
@@ -31,7 +31,7 @@ function registerUser() {
     delete msg.repassword;
     reqWSC('user.add', msg)
     .then(r => {
-        popup.success(JSON.stringify(r));
+        popup.success('Successful registration, you can login now!');
     })
     .catch(e => {
         popup.error(e.message);
