@@ -27,6 +27,8 @@ var staticMiddleware = async function(req, res, next) {
     if ((req.path.endsWith('.html') || req.path.endsWith('/') ) && req.headers.cookie) {
       var jwtToken = getCookie('jwtToken', req.headers.cookie);
       var sessionValid = await session.verify(jwtToken);
+    } else if (req.path.endsWith('.html') || req.path.endsWith('/') ) {
+      throw new Error('');
     }
     next();
   } catch(e) {
