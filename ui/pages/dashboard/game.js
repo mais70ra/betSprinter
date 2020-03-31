@@ -1,6 +1,12 @@
 var canvasWidth = 800;
 var canvasHeight = 400;
-var app = new PIXI.Application(canvasWidth, canvasHeight, { antialias: true });
+// backgroundColor: 0xffffff
+var app = new PIXI.Application({
+  width: canvasWidth,
+  canvasHeight: canvasHeight,
+  backgroundColor: 0xffffff,
+  antialias: true
+});
 document.getElementById("game-container").appendChild(app.view);
 var stage = new PIXI.Container();
 stage.interactive = true;
